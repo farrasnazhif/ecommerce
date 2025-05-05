@@ -9,20 +9,21 @@ datasource db {
 }
 
 model Product {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
-  slug        String   @unique(map: "product_slug_idx")
+  slug        String      @unique(map: "product_slug_idx")
   category    String
   images      String[]
   brand       String
   description String
   stock       Int
-  price       Float    @default(0)
-  rating      Float    @default(0)
-  numReviews  Int      @default(0)
+  price       Float       @default(0)
+  rating      Float       @default(0)
+  numReviews  Int         @default(0)
   isFeatured  Boolean
   banner      String?
-  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  OrderItem   OrderItem[]
 }
 
 model User {
@@ -40,6 +41,7 @@ model User {
   account       Account[]
   session       Session[]
   Cart          Cart[]
+  Order         Order[]
 }
 
 model Account {
@@ -93,4 +95,36 @@ model Cart {
   createdAt     DateTime @default(now()) @db.Timestamp(6)
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String      @db.Uuid
+  shippingAddress Json        @db.Json
+  paymentResult   Json?       @db.Json
+  itemsPrice      Float
+  totalPrice      Float
+  shippingPrice   Float
+  taxPrice        Float
+  isPaid          Boolean     @default(false)
+  paidAt          DateTime?   @db.Timestamp(6)
+  isDelivered     Boolean     @default(false)
+  deliveredAt     DateTime?   @db.Timestamp(6)
+  createdAt       DateTime    @default(now()) @db.Timestamp(6)
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderitems      OrderItem[]
+}
+
+model OrderItem {
+  orderId   String  @db.Uuid
+  productId String  @db.Uuid
+  qty       Int
+  price     Float
+  name      String
+  slug      String
+  image     String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, productId], map: "orderitems_orderId_productId_pk")
 }

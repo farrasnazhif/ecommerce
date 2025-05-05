@@ -48,9 +48,9 @@ export const cartItemSchema = z.object({
 export const insertCartSchema = z.object({
   items: z.array(cartItemSchema),
   itemsPrice: z.number().min(1, "Items price is required"),
-  totalPrice: z.number().min(1, "Total price is required"),
   shippingPrice: z.number().min(1, "Shipping price is required"),
   taxPrice: z.number().min(1, "Tax price is required"),
+  totalPrice: z.number().min(1, "Total price is required"),
   sessionCartId: z.string().min(1, "Session cart id is required"),
   userId: z.string().optional().nullable(),
 });
@@ -63,4 +63,35 @@ export const shippingAddressSchema = z.object({
   country: z.string().min(3, "Country must be at least 3 characters"),
   lat: z.number().optional(),
   lng: z.number().optional(),
+});
+
+export const insertOrderSchema = z.object({
+  userId: z.string(),
+  itemsPrice: z.number(),
+  shippingPrice: z.number(),
+  taxPrice: z.number(),
+  totalPrice: z.number(),
+  shippingAddress: shippingAddressSchema,
+});
+
+export const insertOrderItemSchema = z.object({
+  productId: z.string(),
+  slug: z.string(),
+  image: z.string(),
+  name: z.string(),
+  price: z.number(),
+  qty: z.number(),
+});
+
+// Schema for updating the user profile
+export const updateProfileSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  email: z.string().min(3, "Email must be at least 3 characters"),
+});
+
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  email_address: z.string(),
+  pricePaid: z.string(),
 });
