@@ -13,6 +13,7 @@ import {
 import convertIDR from "@/utils/currency";
 import Pagination from "@/components/shared/pagination";
 import DeleteDialog from "@/components/shared/delete-dialog";
+import Image from "next/image";
 
 const AdminProductsPage = async (props: {
   searchParams: Promise<{ page: string; query: string; category: string }>;
@@ -32,7 +33,19 @@ const AdminProductsPage = async (props: {
   return (
     <div className="space-y-2">
       <div className="flex-between">
-        <h1 className="h2-bold">Admin products</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="h2-bold">Products</h1>
+          {searchText && (
+            <div>
+              Filtered by <i>&quot;{searchText}&quot;</i>{" "}
+              <Link href="/admin/orders">
+                <Button variant="outline" size="sm">
+                  Remove Filter
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
         <Button asChild variant="default">
           <Link href="/admin/products/create">Create Product</Link>
         </Button>
@@ -43,6 +56,7 @@ const AdminProductsPage = async (props: {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>NAME</TableHead>
+            <TableHead>IMAGE</TableHead>
             <TableHead className="text-center">PRICE</TableHead>
             <TableHead>CATEGORY</TableHead>
             <TableHead>STOCK</TableHead>
@@ -53,19 +67,32 @@ const AdminProductsPage = async (props: {
         <TableBody>
           {products.data.map((product) => (
             <TableRow key={product.id}>
-              <TableCell>{formatId(product.id)}</TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell className="text-center">
+              <TableCell className="align-middle">
+                {formatId(product.id)}
+              </TableCell>
+              <TableCell className="align-middle">{product.name}</TableCell>
+              <TableCell className="align-middle">
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  width={50}
+                  height={50}
+                  className="mx-auto"
+                />
+              </TableCell>
+              <TableCell className="text-center align-middle">
                 {convertIDR(product.price)}
               </TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>{product.stock}</TableCell>
-              <TableCell>{product.rating}</TableCell>
-              <TableCell className="flex gap-1">
-                <Button asChild variant="outline" size="sm">
-                  <Link href={`/admin/products/${product.id}`}>Edit</Link>
-                </Button>
-                <DeleteDialog id={product.id} action={deleteProduct} />
+              <TableCell className="align-middle">{product.category}</TableCell>
+              <TableCell className="align-middle">{product.stock}</TableCell>
+              <TableCell className="align-middle">{product.rating}</TableCell>
+              <TableCell className="align-middle">
+                <div className="flex justify-center gap-1">
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/admin/products/${product.id}`}>Edit</Link>
+                  </Button>
+                  <DeleteDialog id={product.id} action={deleteProduct} />
+                </div>
               </TableCell>
             </TableRow>
           ))}

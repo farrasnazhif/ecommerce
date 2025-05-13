@@ -113,9 +113,9 @@ const OrderDetailsTable = ({
 
   return (
     <>
-      <h1 className="py-4 text-2xl">Order {formatId(id)}</h1>
-      <div className="grid md:grid-cols-3 md:gap-5">
-        <div className="col-span-2 space-y-4 overflow-x-auto">
+      <h1 className="py-4 text-2xl font-bold">Order {formatId(id)}</h1>
+      <div className="grid md:grid-cols-3 gap-5">
+        <div className="md:col-span-2 space-y-4 overflow-x-auto">
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Payment</h2>
@@ -133,7 +133,7 @@ const OrderDetailsTable = ({
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Shipping Adress</h2>
               <p>{shippingAddress.fullName}</p>
-              <p>
+              <p className="mb-4">
                 {shippingAddress.streetAddress}, {shippingAddress.city}
                 {shippingAddress.postalCode}, {shippingAddress.country}
               </p>
@@ -192,7 +192,7 @@ const OrderDetailsTable = ({
         <div>
           <Card>
             <CardContent className="p-4 gap-4 space-y-4">
-              <div className="flex justify-between">
+              <div className="flex  justify-between">
                 <div>Items</div>
                 <div>{convertIDR(itemsPrice)}</div>
               </div>
@@ -204,7 +204,7 @@ const OrderDetailsTable = ({
                 <div>Tax</div>
                 <div>{convertIDR(taxPrice)}</div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between font-bold">
                 <div>Total</div>
                 <div>{convertIDR(totalPrice)}</div>
               </div>

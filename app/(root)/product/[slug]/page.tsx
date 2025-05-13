@@ -9,6 +9,9 @@ import { getProductBySlug } from "@/lib/actions/product.action";
 import convertIDR from "@/utils/currency";
 import { notFound } from "next/navigation";
 import { getMyCart } from "@/lib/actions/cart.action";
+import ReviewList from "./review-list";
+import { auth } from "@/auth";
+import Rating from "@/components/shared/product/rating";
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
@@ -16,6 +19,9 @@ const ProductDetailsPage = async (props: {
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+
+  const session = await auth();
+  const userId = session?.user?.id;
 
   const cart = await getMyCart();
   return (
@@ -31,9 +37,8 @@ const ProductDetailsPage = async (props: {
                 {product.brand} {product.category}
               </p>
               <h1 className="h3-bold">{product.name}</h1>
-              <p>
-                {`${product.rating}`} of {product.numReviews} Reviews
-              </p>
+              <Rating value={Number(product.rating)} />
+              <p>{product.numReviews} reviews</p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <div className="w-30 rounded-full bg-green-100 text-green-700 px-5 py-2 font-bold">
                   {convertIDR(Number(product.price))}
@@ -46,16 +51,19 @@ const ProductDetailsPage = async (props: {
             </div>
           </div>
           {/* Action Column */}
-          <div>
+          <div className="w-full">
             <Card>
-              <CardContent className="p-4">
-                <div className="mb-2 flex justify-between">
+              <CardContent className="p-4 space-y-3">
+                {/* Price Row */}
+                <div className="flex justify-between flex-wrap gap-2 text-sm sm:text-base">
                   <div>Price</div>
                   <div className="font-bold">
                     {convertIDR(Number(product.price))}
                   </div>
                 </div>
-                <div className="mb-2 flex justify-between">
+
+                {/* Status Row */}
+                <div className="flex justify-between flex-wrap gap-2 text-sm sm:text-base">
                   <div>Status</div>
                   {product.stock > 0 ? (
                     <Badge variant="outline">In Stock</Badge>
@@ -63,8 +71,10 @@ const ProductDetailsPage = async (props: {
                     <Badge variant="destructive">Out Of Stock</Badge>
                   )}
                 </div>
+
+                {/* Add to Cart */}
                 {product.stock > 0 && (
-                  <div className="flex-center">
+                  <div className="flex justify-center mt-4">
                     <AddToCart
                       cart={cart}
                       item={{
@@ -82,6 +92,15 @@ const ProductDetailsPage = async (props: {
             </Card>
           </div>
         </div>
+      </section>
+      <hr className=" mt-8  border-slate-500 mb-8" />
+      <section>
+        <h2 className="h2-bold flex-center mb-8">Customer Reviews</h2>
+        <ReviewList
+          userId={userId || ""}
+          productId={product.id}
+          productSlug={product.slug}
+        />
       </section>
     </>
   );

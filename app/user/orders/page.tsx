@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import Pagination from "@/components/shared/pagination";
 import convertIDR from "@/utils/currency";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "My Orders",
@@ -61,7 +62,9 @@ const OrdersPage = async (props: {
                 </TableCell>
                 <TableCell>
                   <Link href={`/order/${order.id}`}>
-                    <span className="px-2">Details</span>
+                    <Button variant="default" className="px-2">
+                      Details
+                    </Button>
                   </Link>
                 </TableCell>
               </TableRow>

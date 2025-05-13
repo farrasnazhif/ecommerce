@@ -8,15 +8,17 @@ const ProductImages = ({ images }: { images: string[] }) => {
   const [current, setCurrent] = useState(0);
 
   return (
-    <div className="space-y-4">
-      <Image
-        src={images[current]}
-        alt="product image"
-        width={1000}
-        height={1000}
-        className="min-h-[300px] object-cover object-center"
-      />
-      <div className="flex">
+    <div className="flex gap-4 md:flex-col">
+      <div className="relative w-full max-w-[400px] aspect-square">
+        <Image
+          src={images[current]}
+          alt="Selected product image"
+          fill
+          className="object-cover rounded"
+          sizes="(max-width: 768px) 100vw, 400px"
+        />
+      </div>
+      <div className="space-y-2 md:flex md:space-y-0">
         {images.map((image, index) => (
           <div
             key={image}
