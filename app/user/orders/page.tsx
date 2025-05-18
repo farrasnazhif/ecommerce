@@ -30,7 +30,8 @@ const OrdersPage = async (props: {
   return (
     <div className="space-y-2">
       <h2 className="h2-bold">Orders</h2>
-      <div className="overflow-x-auto">
+      {/* DESKTOP */}
+      <div className="md:overflow-x-auto hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -60,6 +61,46 @@ const OrdersPage = async (props: {
                     ? formatDateTime(order.deliveredAt).dateTime
                     : "Not Delivered"}
                 </TableCell>
+                <TableCell>
+                  <Link href={`/order/${order.id}`}>
+                    <Button variant="default" className="px-2">
+                      Details
+                    </Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {orders.totalPages > 1 && (
+          <Pagination
+            page={Number(page) || 1}
+            totalPages={orders?.totalPages}
+          />
+        )}
+      </div>
+
+      {/* MOBILE */}
+      <div className="overflow-x-auto md:hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>DATE</TableHead>
+              <TableHead>TOTAL</TableHead>
+
+              <TableHead>ACTIONS</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.data.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>{formatId(order.id)}</TableCell>
+                <TableCell>
+                  {formatDateTime(order.createdAt).dateTime}
+                </TableCell>
+                <TableCell>{convertIDR(order.totalPrice)}</TableCell>
+
                 <TableCell>
                   <Link href={`/order/${order.id}`}>
                     <Button variant="default" className="px-2">

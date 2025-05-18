@@ -41,20 +41,22 @@ const AdminOrdersPage = async (props: {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 justify-between">
         <h1 className="h2-bold">Orders</h1>
         {searchText && (
           <div>
             Filtered by <i>&quot;{searchText}&quot;</i>{" "}
             <Link href="/admin/orders">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="ml-2">
                 Remove Filter
               </Button>
             </Link>
           </div>
         )}
       </div>
-      <div className="overflow-x-auto">
+
+      {/* DESKTOP */}
+      <div className="hidden md:block overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -91,6 +93,46 @@ const AdminOrdersPage = async (props: {
                     <Link href={`/order/${order.id}`}>Details</Link>
                   </Button>
                   <DeleteDialog id={order.id} action={deleteOrder} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {orders.totalPages > 1 && (
+          <Pagination
+            page={Number(page) || 1}
+            totalPages={orders?.totalPages}
+          />
+        )}
+      </div>
+
+      {/* MOBILE */}
+      <div className="overflow-x-auto md:hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>DATE</TableHead>
+              <TableHead>BUYER</TableHead>
+              <TableHead>ACTIONS</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.data.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>{formatId(order.id)}</TableCell>
+                <TableCell>
+                  {formatDateTime(order.createdAt).dateTime}
+                </TableCell>
+                <TableCell>{order.user.name}</TableCell>
+
+                <TableCell>
+                  <div className="flex ">
+                    <Button asChild variant="default" size="sm">
+                      <Link href={`/order/${order.id}`}>Details</Link>
+                    </Button>
+                    <DeleteDialog id={order.id} action={deleteOrder} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

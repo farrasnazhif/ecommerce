@@ -25,6 +25,7 @@ import { UploadButton } from "@/lib/uploadthing";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
+import { X } from "lucide-react";
 
 const ProductForm = ({
   type,
@@ -257,15 +258,29 @@ const ProductForm = ({
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {images.map((image: string) => (
-                        <Image
-                          key={image}
-                          src={image}
-                          alt="product image"
-                          className="w-20 h-20 object-cover object-center rounded-sm"
-                          width={100}
-                          height={100}
-                        />
+                      {images.map((image: string, index: number) => (
+                        <div key={image} className="relative group">
+                          <Image
+                            src={image}
+                            alt="product image"
+                            className="w-20 h-20 object-cover object-center rounded-sm"
+                            width={100}
+                            height={100}
+                          />
+
+                          <button
+                            type="button"
+                            className="absolute -top-1.5 -right-1.5 bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition border border-black"
+                            onClick={() => {
+                              const updatedImages = images.filter(
+                                (_, i) => i !== index
+                              );
+                              form.setValue("images", updatedImages);
+                            }}
+                          >
+                            <X className="h-2 w-2" />
+                          </button>
+                        </div>
                       ))}
 
                       <FormControl>
@@ -311,13 +326,23 @@ const ProductForm = ({
                 )}
               />
               {isFeatured && banner && (
-                <Image
-                  src={banner}
-                  alt="banner image"
-                  className="w-full object-cover object-center rounded-sm"
-                  width={1920}
-                  height={680}
-                />
+                <div className="relative group">
+                  <Image
+                    src={banner}
+                    alt="banner image"
+                    className="w-full object-cover object-center rounded-sm"
+                    width={1920}
+                    height={680}
+                  />
+
+                  <button
+                    type="button"
+                    className="absolute -top-1.5 -right-1.5 bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition border border-black"
+                    onClick={() => form.setValue("banner", "")}
+                  >
+                    <X className="h-2 w-2" />
+                  </button>
+                </div>
               )}
 
               {isFeatured && !banner && (

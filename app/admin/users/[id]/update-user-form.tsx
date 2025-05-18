@@ -70,7 +70,7 @@ const UpdateUserForm = ({
     <Form {...form}>
       <form method="POST" onSubmit={form.handleSubmit(onSubmit)}>
         {/* Email */}
-        <div>
+        <div className="mb-4">
           <FormField
             control={form.control}
             name="email"
@@ -97,7 +97,7 @@ const UpdateUserForm = ({
           />
         </div>
         {/* Name */}
-        <div>
+        <div className="mb-4">
           <FormField
             control={form.control}
             name="name"
@@ -120,7 +120,7 @@ const UpdateUserForm = ({
           />
         </div>
         {/* Role */}
-        <div>
+        <div className="mb-4">
           <FormField
             control={form.control}
             name="role"

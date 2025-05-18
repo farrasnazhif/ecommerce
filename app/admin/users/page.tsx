@@ -4,6 +4,13 @@ import Pagination from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
   Table,
   TableBody,
   TableCell,
@@ -41,20 +48,22 @@ const AdminUsersPage = async (props: {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 justify-between">
         <h1 className="h2-bold">Users</h1>
         {searchText && (
           <div>
             Filtered by <i>&quot;{searchText}&quot;</i>{" "}
             <Link href="/admin/users">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="ml-2">
                 Remove Filter
               </Button>
             </Link>
           </div>
         )}
       </div>
-      <div className="overflow-x-auto">
+
+      {/* DESKTOP */}
+      <div className="overflow-x-auto hidden md:block">
         <Table>
           <TableHeader>
             <TableRow>
@@ -83,6 +92,61 @@ const AdminUsersPage = async (props: {
                     <Link href={`/admin/users/${user.id}`}>Edit</Link>
                   </Button>
                   <DeleteDialog id={user.id} action={deleteUser} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {users.totalPages > 1 && (
+          <Pagination page={Number(page) || 1} totalPages={users?.totalPages} />
+        )}
+      </div>
+
+      {/* MOBILE */}
+      <div className="overflow-x-auto md:hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>NAME</TableHead>
+              <TableHead>DETAILS</TableHead>
+              <TableHead>ACTIONS</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.data.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{formatId(user.id)}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell className="align-middle">
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <Button variant="default" size="sm">
+                        Details
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent className="p-4">
+                      <DrawerHeader>
+                        <DrawerTitle>{user.name}</DrawerTitle>
+                      </DrawerHeader>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <strong>Email:</strong> {user.email}
+                        </div>
+                        <div>
+                          <strong>Role:</strong> {user.role}
+                        </div>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                </TableCell>
+                <TableCell>
+                  <div className="flex">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/admin/users/${user.id}`}>Edit</Link>
+                    </Button>
+                    <DeleteDialog id={user.id} action={deleteUser} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
