@@ -68,17 +68,7 @@ const Header = async () => {
                 {(cart?.items?.length ?? 0) > 0 && (
                   <span
                     key={cart?.items?.length ?? 0}
-                    className="
-    absolute 
-    -translate-y-[140%] translate-x-2.5
-    text-xs font-extrabold text-white 
-    bg-[hsl(0,0%,0%)] 
-    w-5 h-5
-    flex items-center justify-center 
-    rounded-full 
-    border-2 border-white
-    animate-fadeIn
-"
+                    className="absolute -translate-y-[140%] text-xs font-extrabold text-white bg-[hsl(0,0%,0%)] w-5 h-5flex items-center justify-center rounded-full border-2 border-white animate-fadeIn"
                   >
                     {cart?.items?.length ?? 0}
                   </span>
