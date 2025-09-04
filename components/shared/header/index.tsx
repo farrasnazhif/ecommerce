@@ -8,6 +8,7 @@ import Search from "./search";
 import { Package2, ShoppingCart } from "lucide-react";
 import CategoryOptions from "./category-options";
 import { getAllProducts } from "@/lib/actions/product.action";
+import { getMyCart } from "@/lib/actions/cart.action";
 
 const Header = async () => {
   const { data: allProducts } = await getAllProducts({
@@ -15,6 +16,8 @@ const Header = async () => {
     limit: 10,
     page: 1,
   });
+
+  const cart = await getMyCart();
 
   return (
     <header className="w-full border-b">
@@ -62,6 +65,24 @@ const Header = async () => {
             <button className="rounded-full p-2 hover:bg-gray-100">
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
+                {(cart?.items?.length ?? 0) > 0 && (
+                  <span
+                    key={cart?.items?.length ?? 0}
+                    className="
+    absolute 
+    -translate-y-[140%] translate-x-2.5
+    text-xs font-extrabold text-white 
+    bg-[hsl(0,0%,0%)] 
+    w-5 h-5
+    flex items-center justify-center 
+    rounded-full 
+    border-2 border-white
+    animate-fadeIn
+"
+                  >
+                    {cart?.items?.length ?? 0}
+                  </span>
+                )}
               </Link>
             </button>
           </div>

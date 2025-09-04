@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
+
 import { compareSync } from "bcrypt-ts-edge";
 // import { PrismaClient } from "@prisma/client";
 import { authConfig } from "./auth.config";
